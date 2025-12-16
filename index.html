@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HELOC Payment Calculator | Peoples Security Bank &amp; Trust</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --psbt-navy: #003366;
+            --psbt-dark-blue: #002855;
+            --psbt-light-blue: #0066a1;
+            --psbt-accent-blue: #4a90c2;
+            --psbt-teal: #00857c;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--white);
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        .heloc-calculator {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .calc-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .calc-header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--psbt-navy);
+            margin-bottom: 8px;
+        }
+
+        .calc-header p {
+            font-size: 1rem;
+            color: var(--gray-600);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .rate-banner {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .rate-item {
+            text-align: center;
+            padding: 12px 24px;
+            background: var(--gray-50);
+            border-radius: 8px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .rate-item-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .rate-item-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--psbt-navy);
+        }
+
+        .rate-item-value sup {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .calc-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .calc-container {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        .calc-inputs {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .calc-results {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .section-label {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--psbt-navy);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--psbt-navy);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+        }
+
+        .input-group label .helper {
+            font-weight: 400;
+            color: var(--gray-500);
+            font-size: 0.8125rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .prefix,
+        .input-wrapper .suffix {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            pointer-events: none;
+        }
+
+        .input-wrapper .prefix {
+            left: 14px;
+        }
+
+        .input-wrapper .suffix {
+            right: 14px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 1rem;
+            font-family: inherit;
+            font-weight: 500;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            background: var(--white);
+            color: var(--gray-800);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: var(--psbt-light-blue);
+            box-shadow: 0 0 0 3px rgba(0, 102, 161, 0.15);
+        }
+
+        .input-wrapper input.has-prefix {
+            padding-left: 32px;
+        }
+
+        .input-wrapper input.has-suffix {
+            padding-right: 50px;
+        }
+
+        .slider-wrapper {
+            margin-top: 8px;
+        }
+
+        .slider-wrapper input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--gray-200);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .slider-wrapper input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--psbt-navy);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid var(--white);
+            box-shadow: var(--shadow-md);
+            transition: transform 0.15s;
+        }
+
+        .slider-wrapper input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        .slider-wrapper input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--psbt-navy);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid var(--white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        .toggle-group {
+            display: flex;
+            background: var(--gray-100);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 0.875rem;
+            font-family: inherit;
+            font-weight: 500;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: var(--white);
+            color: var(--psbt-navy);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toggle-btn:hover:not(.active) {
+            color: var(--gray-800);
+        }
+
+        .primary-result {
+            background: var(--psbt-navy);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .primary-result-label {
+            font-size: 0.8125rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 4px;
+        }
+
+        .primary-result-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .primary-result-sub {
+            font-size: 0.8125rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 2px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-row-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .result-row-value {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .intro-savings {
+            background: linear-gradient(135deg, #e6f7f6 0%, #f0faf9 100%);
+            border: 1px solid #b2e5e1;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .intro-savings-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--psbt-teal);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .intro-savings-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--psbt-teal);
+        }
+
+        .intro-savings-note {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            margin-top: 4px;
+        }
+
+        .cta-button {
+            display: block;
+            width: 100%;
+            padding: 14px 24px;
+            margin-top: 20px;
+            font-size: 1rem;
+            font-family: inherit;
+            font-weight: 600;
+            color: var(--white);
+            background: var(--psbt-navy);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .cta-button:hover {
+            background: var(--psbt-dark-blue);
+        }
+
+        .cta-button:active {
+            transform: scale(0.98);
+        }
+
+        .disclaimer {
+            margin-top: 24px;
+            padding: 16px;
+            background: var(--gray-50);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        .disclaimer strong {
+            color: var(--gray-600);
+        }
+
+        .attribution {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .attribution p {
+            font-size: 0.8125rem;
+            color: var(--gray-500);
+        }
+
+        .attribution a {
+            color: var(--psbt-navy);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .attribution a:hover {
+            text-decoration: underline;
+        }
+
+        .psbt-logo-link {
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .psbt-logo-link img {
+            height: 40px;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="heloc-calculator">
+        <header class="calc-header">
+            <h1>HELOC Payment Calculator</h1>
+            <p>Estimate your monthly payment on a Home Equity Line of Credit from Peoples Security Bank &amp; Trust</p>
+            
+            <div class="rate-banner">
+                <div class="rate-item">
+                    <div class="rate-item-label">Intro Rate (6 mo.)</div>
+                    <div class="rate-item-value">1.99%<sup>APR</sup></div>
+                </div>
+                <div class="rate-item">
+                    <div class="rate-item-label">Variable Rate</div>
+                    <div class="rate-item-value">6.75%<sup>APR</sup></div>
+                </div>
+                <div class="rate-item">
+                    <div class="rate-item-label">Max Loan</div>
+                    <div class="rate-item-value">$300K</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="calc-container">
+            <div class="calc-inputs">
+                <div class="section-label">Enter Your Details</div>
+                
+                <div class="input-group">
+                    <label>Credit Line Amount</label>
+                    <div class="input-wrapper">
+                        <span class="prefix">$</span>
+                        <input type="text" id="loanAmount" class="has-prefix" value="100,000" inputmode="numeric">
+                    </div>
+                    <div class="slider-wrapper">
+                        <input type="range" id="loanSlider" min="10000" max="300000" step="5000" value="100000">
+                        <div class="slider-labels">
+                            <span>$10,000</span>
+                            <span>$300,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Interest Rate (APR) <span class="helper">Current: 6.75%</span></label>
+                    <div class="input-wrapper">
+                        <input type="text" id="interestRate" class="has-suffix" value="6.75" inputmode="decimal">
+                        <span class="suffix">%</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Draw Period</label>
+                    <div class="toggle-group" id="drawPeriod">
+                        <button type="button" class="toggle-btn" data-value="5">5 Years</button>
+                        <button type="button" class="toggle-btn active" data-value="10">10 Years</button>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Payment Type</label>
+                    <div class="toggle-group" id="paymentType">
+                        <button type="button" class="toggle-btn active" data-value="interest">Interest Only</button>
+                        <button type="button" class="toggle-btn" data-value="principal">Principal + Interest</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calc-results">
+                <div class="section-label">Your Estimated Payment</div>
+                
+                <div class="primary-result">
+                    <div class="primary-result-label">Monthly Payment</div>
+                    <div class="primary-result-value" id="monthlyPayment">$562.50</div>
+                    <div class="primary-result-sub" id="paymentTypeLabel">Interest Only</div>
+                </div>
+
+                <div class="result-row">
+                    <span class="result-row-label">Credit Line Amount</span>
+                    <span class="result-row-value" id="resultLoanAmount">$100,000</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-row-label">Interest Rate (APR)</span>
+                    <span class="result-row-value" id="resultRate">6.75%</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-row-label">Draw Period</span>
+                    <span class="result-row-value" id="resultDrawPeriod">10 Years</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-row-label">Total Interest (Draw Period)</span>
+                    <span class="result-row-value" id="totalInterest">$67,500</span>
+                </div>
+
+                <div class="intro-savings">
+                    <div class="intro-savings-label">Intro Rate Savings</div>
+                    <div class="intro-savings-value" id="introSavings">$2,380</div>
+                    <div class="intro-savings-note">Estimated savings during 6-month intro period at 1.99% APR vs. standard rate</div>
+                </div>
+
+                <a href="https://psbt.mortgagewebcenter.com/" target="_blank" rel="noopener" class="cta-button">
+                    Apply for a HELOC
+                </a>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            <strong>Disclaimer:</strong> This calculator is for illustrative purposes only and does not constitute a loan offer or commitment. Actual rates, terms, and payments may vary based on credit qualifications, property valuation, and other factors. The introductory rate of 1.99% APR applies for 6 months with a minimum $10,000 advance and autopay from a PSBT checking account. Following the introductory period, the APR will vary based on Prime Rate. All loans subject to credit and collateral approval. NMLS #401916. Member FDIC. Equal Housing Lender.
+        </div>
+
+        <div class="attribution">
+            <a href="https://www.psbt.com" target="_blank" rel="noopener" class="psbt-logo-link" aria-label="Peoples Security Bank &amp; Trust">
+                <img src="https://www.psbt.com/Portals/0/20240711PSBTLogoStackedBANKTRUSTBlueBackV2.svg" alt="Peoples Security Bank &amp; Trust Logo">
+            </a>
+            <p>HELOC Calculator &copy; <a href="https://www.psbt.com/Borrow/Home-Loans/HELOC" target="_blank" rel="noopener">Peoples Security Bank &amp; Trust</a>.<br>All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // DOM Elements
+            const loanAmountInput = document.getElementById('loanAmount');
+            const loanSlider = document.getElementById('loanSlider');
+            const interestRateInput = document.getElementById('interestRate');
+            const drawPeriodBtns = document.querySelectorAll('#drawPeriod .toggle-btn');
+            const paymentTypeBtns = document.querySelectorAll('#paymentType .toggle-btn');
+            
+            // Result elements
+            const monthlyPaymentEl = document.getElementById('monthlyPayment');
+            const paymentTypeLabelEl = document.getElementById('paymentTypeLabel');
+            const resultLoanAmountEl = document.getElementById('resultLoanAmount');
+            const resultRateEl = document.getElementById('resultRate');
+            const resultDrawPeriodEl = document.getElementById('resultDrawPeriod');
+            const totalInterestEl = document.getElementById('totalInterest');
+            const introSavingsEl = document.getElementById('introSavings');
+
+            // State
+            let state = {
+                loanAmount: 100000,
+                interestRate: 6.75,
+                drawPeriod: 10,
+                paymentType: 'interest'
+            };
+
+            // Utility functions
+            function formatCurrency(num) {
+                return '$' + num.toLocaleString('en-US', { maximumFractionDigits: 0 });
+            }
+
+            function formatCurrencyWithCents(num) {
+                return '$' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+
+            function parseCurrency(str) {
+                return parseFloat(str.replace(/[^0-9.-]+/g, '')) || 0;
+            }
+
+            // Calculation functions
+            function calculateInterestOnlyPayment(principal, annualRate) {
+                const monthlyRate = annualRate / 100 / 12;
+                return principal * monthlyRate;
+            }
+
+            function calculatePrincipalAndInterest(principal, annualRate, years) {
+                const monthlyRate = annualRate / 100 / 12;
+                const numPayments = years * 12;
+                
+                if (monthlyRate === 0) {
+                    return principal / numPayments;
+                }
+                
+                const payment = principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
+                               (Math.pow(1 + monthlyRate, numPayments) - 1);
+                return payment;
+            }
+
+            function calculateTotalInterest(principal, annualRate, years, paymentType) {
+                if (paymentType === 'interest') {
+                    const monthlyInterest = calculateInterestOnlyPayment(principal, annualRate);
+                    return monthlyInterest * years * 12;
+                } else {
+                    const monthlyPayment = calculatePrincipalAndInterest(principal, annualRate, years);
+                    const totalPaid = monthlyPayment * years * 12;
+                    return totalPaid - principal;
+                }
+            }
+
+            function calculateIntroSavings(principal, regularRate, introRate, introMonths) {
+                const regularMonthly = calculateInterestOnlyPayment(principal, regularRate);
+                const introMonthly = calculateInterestOnlyPayment(principal, introRate);
+                return (regularMonthly - introMonthly) * introMonths;
+            }
+
+            // Update display
+            function updateCalculations() {
+                let monthlyPayment;
+                
+                if (state.paymentType === 'interest') {
+                    monthlyPayment = calculateInterestOnlyPayment(state.loanAmount, state.interestRate);
+                    paymentTypeLabelEl.textContent = 'Interest Only';
+                } else {
+                    monthlyPayment = calculatePrincipalAndInterest(state.loanAmount, state.interestRate, state.drawPeriod);
+                    paymentTypeLabelEl.textContent = 'Principal + Interest';
+                }
+
+                const totalInterest = calculateTotalInterest(state.loanAmount, state.interestRate, state.drawPeriod, state.paymentType);
+                const introSavings = calculateIntroSavings(state.loanAmount, state.interestRate, 1.99, 6);
+
+                // Update display
+                monthlyPaymentEl.textContent = formatCurrencyWithCents(monthlyPayment);
+                resultLoanAmountEl.textContent = formatCurrency(state.loanAmount);
+                resultRateEl.textContent = state.interestRate.toFixed(2) + '%';
+                resultDrawPeriodEl.textContent = state.drawPeriod + ' Years';
+                totalInterestEl.textContent = formatCurrency(Math.round(totalInterest));
+                introSavingsEl.textContent = formatCurrency(Math.round(introSavings));
+            }
+
+            // Event handlers
+            loanAmountInput.addEventListener('input', function(e) {
+                let value = parseCurrency(e.target.value);
+                value = Math.min(Math.max(value, 0), 300000);
+                state.loanAmount = value;
+                loanSlider.value = value;
+                updateCalculations();
+            });
+
+            loanAmountInput.addEventListener('blur', function(e) {
+                e.target.value = formatCurrency(state.loanAmount).replace('$', '');
+            });
+
+            loanAmountInput.addEventListener('focus', function(e) {
+                e.target.value = state.loanAmount;
+            });
+
+            loanSlider.addEventListener('input', function(e) {
+                state.loanAmount = parseInt(e.target.value);
+                loanAmountInput.value = formatCurrency(state.loanAmount).replace('$', '');
+                updateCalculations();
+            });
+
+            interestRateInput.addEventListener('input', function(e) {
+                let value = parseFloat(e.target.value) || 0;
+                value = Math.min(Math.max(value, 0), 25);
+                state.interestRate = value;
+                updateCalculations();
+            });
+
+            interestRateInput.addEventListener('blur', function(e) {
+                e.target.value = state.interestRate.toFixed(2);
+            });
+
+            drawPeriodBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    drawPeriodBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    state.drawPeriod = parseInt(this.dataset.value);
+                    updateCalculations();
+                });
+            });
+
+            paymentTypeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    paymentTypeBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    state.paymentType = this.dataset.value;
+                    updateCalculations();
+                });
+            });
+
+            // Initial calculation
+            updateCalculations();
+        })();
+    </script>
+</body>
+</html>
