@@ -222,24 +222,28 @@
             function formatCurrencyWithCents(num) { return '$' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
             function parseCurrency(str) { return parseFloat(str.replace(/[^0-9.-]+/g, '')) || 0; }
 
+            // Interest-only: principal * (rate / 12)
             function calculateInterestOnlyPayment(principal, annualRate) {
                 return principal * (annualRate / 100 / 12);
             }
 
+            // P+I: flat method per client spec
+            // Monthly interest: principal * (rate / 12)
+            // Monthly principal: principal / (years * 12)
+            // Total monthly: sum of both
             function calculatePrincipalAndInterest(principal, annualRate, years) {
-                const monthlyRate = annualRate / 100 / 12;
-                const numPayments = years * 12;
-                if (monthlyRate === 0) return principal / numPayments;
-                return principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+                var monthlyInterest = principal * (annualRate / 100 / 12);
+                var monthlyPrincipal = principal / (years * 12);
+                return monthlyInterest + monthlyPrincipal;
             }
 
+            // Total interest over draw period
+            // Interest-only: flat monthly interest * total months
+            // P+I: since monthly interest is always calculated on original principal (flat method),
+            //       total interest = monthlyInterest * totalMonths
             function calculateTotalInterest(principal, annualRate, years, paymentType) {
-                if (paymentType === 'interest') {
-                    return calculateInterestOnlyPayment(principal, annualRate) * years * 12;
-                } else {
-                    const monthlyPayment = calculatePrincipalAndInterest(principal, annualRate, years);
-                    return (monthlyPayment * years * 12) - principal;
-                }
+                var monthlyInterest = calculateInterestOnlyPayment(principal, annualRate);
+                return monthlyInterest * years * 12;
             }
 
             function calculateIntroSavings(principal, regularRate, introRate, introMonths) {
@@ -247,7 +251,7 @@
             }
 
             function updateCalculations() {
-                let monthlyPayment;
+                var monthlyPayment;
                 if (state.paymentType === 'interest') {
                     monthlyPayment = calculateInterestOnlyPayment(state.loanAmount, state.interestRate);
                     paymentTypeLabelEl.textContent = 'Interest Only';
@@ -255,8 +259,8 @@
                     monthlyPayment = calculatePrincipalAndInterest(state.loanAmount, state.interestRate, state.drawPeriod);
                     paymentTypeLabelEl.textContent = 'Principal + Interest';
                 }
-                const totalInterest = calculateTotalInterest(state.loanAmount, state.interestRate, state.drawPeriod, state.paymentType);
-                const introSavings = calculateIntroSavings(state.loanAmount, state.interestRate, 1.99, 6);
+                var totalInterest = calculateTotalInterest(state.loanAmount, state.interestRate, state.drawPeriod, state.paymentType);
+                var introSavings = calculateIntroSavings(state.loanAmount, state.interestRate, 1.99, 6);
 
                 monthlyPaymentEl.textContent = formatCurrencyWithCents(monthlyPayment);
                 resultLoanAmountEl.textContent = formatCurrency(state.loanAmount);
@@ -267,7 +271,7 @@
             }
 
             loanAmountInput.addEventListener('input', function(e) {
-                let value = Math.min(Math.max(parseCurrency(e.target.value), 0), 300000);
+                var value = Math.min(Math.max(parseCurrency(e.target.value), 0), 300000);
                 state.loanAmount = value;
                 loanSlider.value = value;
                 updateCalculations();
@@ -287,20 +291,20 @@
             });
             interestRateInput.addEventListener('blur', function(e) { e.target.value = state.interestRate.toFixed(2); });
 
-            drawPeriodBtns.forEach(btn => {
+            drawPeriodBtns.forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    drawPeriodBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    state.drawPeriod = parseInt(this.dataset.value);
+                    drawPeriodBtns.forEach(function(b) { b.classList.remove('active'); });
+                    btn.classList.add('active');
+                    state.drawPeriod = parseInt(btn.dataset.value);
                     updateCalculations();
                 });
             });
 
-            paymentTypeBtns.forEach(btn => {
+            paymentTypeBtns.forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    paymentTypeBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    state.paymentType = this.dataset.value;
+                    paymentTypeBtns.forEach(function(b) { b.classList.remove('active'); });
+                    btn.classList.add('active');
+                    state.paymentType = btn.dataset.value;
                     updateCalculations();
                 });
             });
