@@ -106,7 +106,7 @@
                 </div>
                 <div class="rate-item">
                     <div class="rate-item-label">Variable Rate</div>
-                    <div class="rate-item-value">6.75%<sup>2,4</sup> <sup>APR</sup></div>
+                    <div class="rate-item-value">7.00%<sup>2,4</sup> <sup>APR</sup></div>
                 </div>
                 <div class="rate-item">
                     <div class="rate-item-label">Max Loan</div>
@@ -133,9 +133,9 @@
                     </div>
                 </div>
                 <div class="input-group">
-                    <label>Interest Rate (APR) <span class="helper">Current: 6.75%<sup>2,4</sup></span></label>
+                    <label>Interest Rate (APR) <span class="helper">Current: 7.00%<sup>2,4</sup></span></label>
                     <div class="input-wrapper">
-                        <input type="text" id="interestRate" class="has-suffix" value="6.75" inputmode="decimal">
+                        <input type="text" id="interestRate" class="has-suffix" value="7.00" inputmode="decimal">
                         <span class="suffix">%</span>
                     </div>
                 </div>
@@ -159,7 +159,7 @@
                 <div class="section-label">Your Estimated Payment</div>
                 <div class="primary-result">
                     <div class="primary-result-label">Monthly Payment</div>
-                    <div class="primary-result-value" id="monthlyPayment">$562.50</div>
+                    <div class="primary-result-value" id="monthlyPayment">$583.33</div>
                     <div class="primary-result-sub" id="paymentTypeLabel">Interest Only</div>
                 </div>
                 <div class="result-row">
@@ -168,7 +168,7 @@
                 </div>
                 <div class="result-row">
                     <span class="result-row-label">Interest Rate (APR)</span>
-                    <span class="result-row-value" id="resultRate">6.75%</span>
+                    <span class="result-row-value" id="resultRate">7.00%</span>
                 </div>
                 <div class="result-row">
                     <span class="result-row-label">Draw Period</span>
@@ -176,11 +176,11 @@
                 </div>
                 <div class="result-row">
                     <span class="result-row-label">Total Interest (Draw Period)</span>
-                    <span class="result-row-value" id="totalInterest">$67,500</span>
+                    <span class="result-row-value" id="totalInterest">$70,000</span>
                 </div>
                 <div class="intro-savings">
                     <div class="intro-savings-label">Intro Rate Savings</div>
-                    <div class="intro-savings-value" id="introSavings">$2,380</div>
+                    <div class="intro-savings-value" id="introSavings">$2,505</div>
                     <div class="intro-savings-note">Estimated savings during 6-month intro period at 1.99%<sup>2,3</sup> APR vs. standard rate</div>
                 </div>
                 <a href="https://psbt.mortgagewebcenter.com/" target="_blank" rel="noopener" class="cta-button">Apply for a HELOC<sup>1</sup></a>
@@ -216,7 +216,7 @@
             const totalInterestEl = document.getElementById('totalInterest');
             const introSavingsEl = document.getElementById('introSavings');
 
-            let state = { loanAmount: 100000, interestRate: 6.75, drawPeriod: 10, paymentType: 'interest' };
+            let state = { loanAmount: 100000, interestRate: 7.00, drawPeriod: 10, paymentType: 'interest' };
 
             function formatCurrency(num) { return '$' + num.toLocaleString('en-US', { maximumFractionDigits: 0 }); }
             function formatCurrencyWithCents(num) { return '$' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
