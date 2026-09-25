@@ -102,7 +102,7 @@
             <div class="rate-banner">
                 <div class="rate-item">
                     <div class="rate-item-label">Intro Rate (6 mo.)</div>
-                    <div class="rate-item-value">1.99%<sup>2,3</sup> <sup>APR</sup></div>
+                    <div class="rate-item-value">2.99%<sup>2,3</sup> <sup>APR</sup></div>
                 </div>
                 <div class="rate-item">
                     <div class="rate-item-label">Variable Rate</div>
@@ -180,8 +180,8 @@
                 </div>
                 <div class="intro-savings">
                     <div class="intro-savings-label">Intro Rate Savings</div>
-                    <div class="intro-savings-value" id="introSavings">$2,505</div>
-                    <div class="intro-savings-note">Estimated savings during 6-month intro period at 1.99%<sup>2,3</sup> APR vs. standard rate</div>
+                    <div class="intro-savings-value" id="introSavings">$2,005</div>
+                    <div class="intro-savings-note">Estimated savings during 6-month intro period at 2.99%<sup>2,3</sup> APR vs. standard rate</div>
                 </div>
                 <a href="https://psbt.mortgagewebcenter.com/" target="_blank" rel="noopener" class="cta-button">Apply for a HELOC<sup>1</sup></a>
             </div>
@@ -260,7 +260,7 @@
                     paymentTypeLabelEl.textContent = 'Principal + Interest';
                 }
                 var totalInterest = calculateTotalInterest(state.loanAmount, state.interestRate, state.drawPeriod, state.paymentType);
-                var introSavings = calculateIntroSavings(state.loanAmount, state.interestRate, 1.99, 6);
+                var introSavings = calculateIntroSavings(state.loanAmount, state.interestRate, 2.99, 6);
 
                 monthlyPaymentEl.textContent = formatCurrencyWithCents(monthlyPayment);
                 resultLoanAmountEl.textContent = formatCurrency(state.loanAmount);
